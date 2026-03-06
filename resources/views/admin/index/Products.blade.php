@@ -8,6 +8,7 @@
 </head>
 <body>
 <a href="{{ route("Delivry.form") }}"> add Delivery </a>
+<a href="{{ route("admin.deliveries") }}"> All Delivery </a>
     <div class="container mt-5">
     <h1 class="mb-4">كل المنتجات</h1>
 

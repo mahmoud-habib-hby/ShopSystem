@@ -10,25 +10,7 @@ use App\Http\Controllers\Controller;
 
 class AuthController extends Controller
 {
-    public function DeliveryForm(){
-        return view("admin.add.Delivery");
-    }
-        public function Delivery(Request $request){
-            $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|confirmed|min:6'
-            // 'role' => 'required|in:admin,delivery,customer',
-        ]);
 
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => 'delivery',
-        ]);
-        return redirect('product'); 
-    }
     // صفحة تسجيل الدخول
     public function showLoginForm()
     {

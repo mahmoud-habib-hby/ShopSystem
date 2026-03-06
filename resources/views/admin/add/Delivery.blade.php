@@ -43,7 +43,10 @@
             <label for="email" class="form-label">البريد الإلكتروني</label>
             <input type="email" name="email" id="email" class="form-control" placeholder="example@mail.com" required>
         </div>
-
+        <div class="mb-3">
+            <label for="phone" class="form-label">رقم الهاتف</label>
+            <input type="text" name="phone" class="form-control" placeholder="example@mail.com" required>
+        </div>
         <div class="mb-3">
             <label for="password" class="form-label">كلمة المرور</label>
             <input type="password" name="password" id="password" class="form-control" placeholder="********" required>

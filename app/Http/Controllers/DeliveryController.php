@@ -39,4 +39,9 @@ public function delivered($id) {
     ]);
     return redirect()->back()->with('success', 'تم تعيين الطلب بنجاح');
 }
+public function past(){
+    $userId=Auth::user()->id;
+    $orders= Order::where("delivery_id",$userId)->get();
+    return view("Delivery.Past",compact("orders"));
+}
 }

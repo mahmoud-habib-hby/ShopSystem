@@ -8,6 +8,7 @@
 </head>
 <body>
 <a href="{{ route('delivery.work') }}">work</a>
+<a href="{{ route('delivery.past') }}">past</a>
 <div class="container mt-5">
     <h2 class="mb-4">الطلبات الحالية (Pending)</h2>
 
