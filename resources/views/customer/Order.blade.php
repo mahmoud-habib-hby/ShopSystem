@@ -135,6 +135,7 @@
                 <div class="order-card">
                     <div class="order-header">
                         <span class="order-id">طلب رقم: #{{ $order->id }}</span>
+                        <a href="{{ route("customer.cancel",$order->id) }}">الغاء الطلب</a>
                         <span class="order-status">{{ $order->status }}</span>
                     </div>
                     

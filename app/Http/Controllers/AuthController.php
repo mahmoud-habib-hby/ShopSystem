@@ -30,9 +30,9 @@ class AuthController extends Controller
 
             // التوجيه حسب الدور
             $role = Auth::user()->role;
-            if ($role === 'admin') return redirect()->route('admin.index.Products');
+            if ($role === 'admin') return redirect()->route('product.index');
             if ($role === 'delivery') return redirect()->route('delivery.index');
-            return redirect()->route('customer.index'); // customer
+            return redirect()->route('customer.index'); 
         }
 
         return back()->with('error', 'البريد الإلكتروني أو كلمة المرور غير صحيحة');
@@ -63,8 +63,6 @@ class AuthController extends Controller
 
         Auth::login($user); 
 
-        if ($user->role === 'admin') return redirect()->route('admin.index.Products');
-        if ($user->role === 'delivery') return redirect()->route('Delivery.index');
         return redirect()->route('customer.index');
     }
 

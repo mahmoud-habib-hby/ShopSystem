@@ -5,12 +5,20 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Http\Controllers\Controller;
+use App\Models\CartItem;
+use App\Models\OrderItem;
+use Illuminate\Support\Facades\Auth;
+
 
 class ProductController extends Controller
 {
     // عرض كل المنتجات
     public function index()
     {
+                $role=Auth::user()->role;
+            if(!$role || $role!=="admin"){
+                return redirect()->back()->with("error","admin only");
+            }
         $products = Product::all();
         return view('admin.index.products', compact('products'));
     }
@@ -88,10 +96,28 @@ class ProductController extends Controller
     }
 
     // حذف المنتج
-    public function destroy($id)
-    {
-        $product = Product::findOrFail($id);
-        $product->delete();
-        return redirect()->route('product.index')->with('success', 'Product Deleted Successfully');
+public function destroy($id)
+{
+    $product = Product::findOrFail($id);
+    
+    // تحديث order_items
+    $product->update([
+        "status"=>"deleted"
+    ]);
+    $product->save();
+    
+    return redirect()->route('product.index')->with('success', 'Product Deleted Successfully');
+}
+    public function AddStock(Request $request ,$id){
+        $product=Product::findOrFail($id);
+        $product->stock=$product->stock+$request->stock;
+        $product->save();
+        return redirect()->back();
+    }
+        public function RemoveStock(Request $request ,$id){
+        $product=Product::findOrFail($id);
+        $product->stock=$product->stock-$request->stock;
+        $product->save();
+        return redirect()->back();
     }
 }

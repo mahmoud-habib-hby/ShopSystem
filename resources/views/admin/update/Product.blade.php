@@ -34,7 +34,10 @@
             <label class="form-label">الوصف:</label>
             <textarea name="description" class="form-control">{{ $product->description }}</textarea>
         </div>
-
+        <div class="mb-3">
+            <label class="form-label">category</label>
+            <textarea name="category" class="form-control">{{ $product->category}}</textarea>
+        </div>
         <div class="mb-3">
             <label class="form-label">السعر:</label>
             <input type="number" step="0.01" name="price" class="form-control" value="{{ $product->price }}">

@@ -44,4 +44,14 @@ public function past(){
     $orders= Order::where("delivery_id",$userId)->get();
     return view("Delivery.Past",compact("orders"));
 }
+public function money($id)
+{
+    $order = Order::findOrFail($id);
+
+    $order->payment_status = "collected";
+
+    $order->save();
+
+    return redirect()->back();
+}
 }

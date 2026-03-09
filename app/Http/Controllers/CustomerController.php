@@ -28,7 +28,6 @@ class CustomerController extends Controller
             return redirect()->route('login');
         }
 
-        // جلب الكمية من الرابط (لو مش موجودة يبقى 1)
         $quantity = $request->quantity ?? 1;
         $product = Product::findOrFail($productId);
         
@@ -101,18 +100,12 @@ class CustomerController extends Controller
         $request->validate([
             'address' => 'required|string|min:5|max:255',
             'phone' => 'required|string|min:11|max:15',
-            'website_url' => 'required|url', // يجب أن يكون رابط صحيح
+            'website_url' => 'required|url', 
             'total_price' => 'required|numeric'
         ]);
 
         $cart = Cart::findOrFail($id);
         $user = Auth::user();
-        
-        // التحقق من أن السلة تخص المستخدم الحالي
-        if ($cart->user_id != $user->id) {
-            return redirect()->route('customer.cart')->with('error', 'هذه السلة لا تخصك');
-        }
-        
         $cart->status = "completed";
         $cart->save();
         
@@ -153,5 +146,16 @@ class CustomerController extends Controller
             "status"=>"received",
         ]);
         return redirect()->back();
+    }
+    public function search(Request $request){
+        $search_products=Product::where("name","LIKE","%$request->search%")->get();
+        return view("customer.Products",compact("search_products"));
+    }
+    public function cancel($id){
+        $order=Order::findOrFail($id);
+        $order->update([
+            "status"=>"canceled"
+        ]);
+    return redirect()->back();
     }
 }

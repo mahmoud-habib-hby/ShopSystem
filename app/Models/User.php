@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Sanctum\HasApiTokens; // ← لازم تضيف السطر ده
 use App\Models\Order;
+use App\Models\Cart;
+
 class User extends Authenticatable
 {
-    use HasFactory;
+    use HasApiTokens, HasFactory; // ← مهم جدًا تضيف HasApiTokens
 
     protected $fillable = [
         'name',
@@ -34,9 +37,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Order::class, 'delivery_id');
     }
+
     // المستخدم لديه عدة سلات
-public function carts()
-{
-    return $this->hasMany(Cart::class);
-}
+    public function carts()
+    {
+        return $this->hasMany(Cart::class);
+    }
 }

@@ -20,13 +20,15 @@
         </div>
     </div>
 
-    @forelse($order as $ord)
+    @forelse($orders as $order)
         <!-- بطاقة الطلب -->
         <div class="card shadow-sm mb-3">
             <div class="card-header bg-white">
                 <div class="d-flex justify-content-between align-items-center">
-                    <span class="fw-bold">طلب #{{ $ord->id }}</span>
-                    <span class="badge bg-info">{{ $ord->created_at->format('Y-m-d') }}</span>
+                    <span class="fw-bold">طلب #{{ $order->id }}</span>
+                    <span class="badge bg-info">{{ $order->created_at->format('Y-m-d') }}</span>
+                    <span class="badge bg-info">{{ $order->payment_status}}</span>
+                    <a href="{{ route("admin.money",$order->id) }}">تم تحصيل المال</a>
                 </div>
             </div>
             
@@ -34,10 +36,10 @@
                 <!-- معلومات بسيطة -->
                 <div class="mb-3">
                     <small class="text-muted d-block">
-                        <i class="fas fa-user"></i> {{ $ord->customer->name ?? 'عميل' }}
+                        <i class="fas fa-user"></i> {{ $order->customer->name ?? 'عميل' }}
                     </small>
                     <small class="text-muted">
-                        <i class="fas fa-phone"></i> {{ $ord->delivery->name ?? 'لا يوجد' }}
+                        <i class="fas fa-phone"></i> {{ $order->delivery->name ?? 'لا يوجد' }}
                     </small>
                 </div>
 
@@ -52,7 +54,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($ord->items as $item)
+                        @foreach($order->items as $item)
                         <tr>
                             <td>{{ $item->product->name ?? 'منتج' }}</td>
                             <td>{{ $item->quantity }}</td>
@@ -64,7 +66,7 @@
                     <tfoot class="table-light">
                         <tr>
                             <td colspan="3" class="text-start fw-bold">الإجمالي:</td>
-                            <td class="fw-bold text-success">{{ number_format($ord->total_price) }} $</td>
+                            <td class="fw-bold text-success">{{ number_format($order->total_price) }} $</td>
                         </tr>
                     </tfoot>
                 </table>
