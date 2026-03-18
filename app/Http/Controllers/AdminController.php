@@ -16,23 +16,33 @@ class AdminController extends Controller
             
         return view("admin.add.Delivery");
     }
-        public function Delivery(Request $request){
-            $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|confirmed|min:6'
-            // 'role' => 'required|in:admin,delivery,customer',
-        ]);
+public function Delivery(Request $request){ 
+    $request->validate([ 
+        'name' => 'required|string|max:255', 
+        'email' => 'required|email|unique:users,email', 
+        'password' => 'required|confirmed|min:6',
+        'phone' => 'required',
+        'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+    ]); 
 
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            "phone"=>$request->phone,
-            'role' => 'delivery',
-        ]);
-        return redirect('product'); 
+    $imagePath = null;
+
+    // رفع الصورة
+    if ($request->hasFile('image')) {
+        $imagePath = $request->file('image')->store('users', 'public');
     }
+
+    User::create([ 
+        'name' => $request->name, 
+        'email' => $request->email, 
+        'password' => Hash::make($request->password), 
+        'phone' => $request->phone, 
+        'role' => 'delivery',
+        'image' => $imagePath, // حفظ مسار الصورة
+    ]); 
+
+    return redirect('product');  
+}
     public function deliveries()
 {
     $deliveries = User::where('role', 'delivery')->get();

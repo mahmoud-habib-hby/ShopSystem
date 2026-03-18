@@ -55,9 +55,10 @@ class DeliveryApiController extends Controller
 
         $userId = Auth::user()->id;
 
-        $orders = Order::where('delivery_id',$userId)
-            ->whereIn('status',['assigned','delivered'])
-            ->get();
+$orders = Order::where('delivery_id', $userId)
+    ->whereIn('status', ['assigned', 'delivered'])
+    ->orderBy('created_at', 'desc')
+    ->get();
 
         return response()->json($orders);
     }

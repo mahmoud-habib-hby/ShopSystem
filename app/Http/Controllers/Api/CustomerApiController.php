@@ -10,11 +10,11 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 
 class CustomerApiController extends Controller
 {
 
-    // عرض كل المنتجات
     public function products()
     {
         $products = Product::all();
@@ -88,7 +88,28 @@ class CustomerApiController extends Controller
         return response()->json($cart);
     }
 
+public function Update(Request $request)
+{
+    $id = Auth::id();
+    $user = User::findOrFail($id);
 
+    // تجهيز البيانات للتحديث
+    $data = [
+        'name' => $request->name ?? $user->name,
+        'email' => $request->email ?? $user->email,
+    ];
+
+    // إذا تم رفع صورة
+    if ($request->hasFile('image')) {
+        $path = $request->file('image')->store('users', 'public');
+        $data['image'] = $path;
+    }
+
+    // تحديث البيانات
+    $user->update($data);
+
+    return response()->json($user);
+}
     // حذف منتج من السلة
     public function removeFromCart($id)
     {
@@ -102,9 +123,11 @@ class CustomerApiController extends Controller
         $product->save();
 
         $cartItem->delete();
+        $data=CartItem::where('cart_id',$cartItem->cart_id)->get();
 
         return response()->json([
-            "message"=>"item removed"
+            "message"=>"item removed",
+            "items"=>$data
         ]);
     }
 

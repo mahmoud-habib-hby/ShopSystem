@@ -13,28 +13,39 @@ class AdminApiController extends Controller
 {
 
     // إضافة دليفري
-    public function delivery(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|confirmed|min:6',
-        ]);
+ public function delivery(Request $request) 
+{ 
+    $request->validate([ 
+        'name' => 'required|string|max:255', 
+        'email' => 'required|email|unique:users,email', 
+        'password' => 'required|confirmed|min:6',
+        'phone' => 'required',
+        'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+    ]); 
 
-        $delivery = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'phone' => $request->phone,
-            'role' => 'delivery',
-        ]);
+    $imagePath = null;
 
-        return response()->json([
-            "message" => "Delivery created successfully",
-            "data" => $delivery
-        ], 201);
+    if ($request->hasFile('image')) {
+        $imagePath = $request->file('image')->store('users', 'public');
     }
 
+    $delivery = User::create([ 
+        'name' => $request->name, 
+        'email' => $request->email, 
+        'password' => Hash::make($request->password), 
+        'phone' => $request->phone, 
+        'role' => 'delivery',
+        'image' => $imagePath,
+    ]); 
+
+    return response()->json([ 
+        "message" => "Delivery created successfully", 
+        "data" => [
+            ...$delivery->toArray(),
+            "image_url" => $imagePath ? asset('storage/' . $imagePath) : null
+        ]
+    ], 201); 
+}
 
     // عرض كل الدليفري
     public function deliveries()

@@ -28,7 +28,6 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('customer/received/{id}', [CustomerApiController::class, 'received']);
     Route::get('customer/order', [CustomerApiController::class, 'orders']);
     Route::get('customer/search/product', [CustomerApiController::class, 'search']);
-
     // Delivery
     // -------------------------------
     Route::get('delivery/money/{id}', [DeliveryApiController::class, 'collectMoney']);
@@ -39,6 +38,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('delivery/delivered/{id}', [DeliveryApiController::class, 'delivered']);
     Route::get('delivery/{id}', [DeliveryApiController::class, 'details']);
 
+Route::post('user/update', [CustomerApiController::class, 'Update']);
     // Admin
     // -------------------------------
     Route::post('delivery', [AdminApiController::class, 'Delivery']);
